@@ -54,8 +54,8 @@ uv run wandb sync ./whisper-heb-nikud
 ## Upload/Download dadtaset cache
 
 ```console
-uv run hf upload --repo-type dataset thewh1teagle/whisper-heb-nikud-dataset ./dataset_cache
-uv run hf download --repo-type dataset thewh1teagle/whisper-heb-nikud-dataset --local-dir ./dataset_cache
+uv run hf upload --repo-type dataset thewh1teagle/whisper-heb-nikud-dataset ./.dataset-cache
+uv run hf download --repo-type dataset thewh1teagle/whisper-heb-nikud-dataset --local-dir ./.dataset-cache
 ```
 
 ## Upload model to HuggingFace

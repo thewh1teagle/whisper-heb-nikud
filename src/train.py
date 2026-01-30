@@ -1,9 +1,13 @@
 """
-To train the model:
-uv run src/train.py --data_dir dataset/ --model_name ivrit-ai/whisper-large-v3-turbo --output_dir whisper-heb-nikud --batch_size 16 --learning_rate 1e-5 --max_steps 1000
-OR
-export WANDB_PROJECT=whisper-heb-nikud
-uv run src/train.py --data_dir dataset/ --model_name ivrit-ai/whisper-large-v3-turbo --output_dir whisper-heb-nikud --batch_size 16 --learning_rate 1e-5 --max_steps 90000 --report_to wandb
+Workflow:
+1) Pre-tokenize and cache the dataset (required for training):
+   uv run src/pre_tokenize.py --data_dir dataset/ --model_name ivrit-ai/whisper-large-v3-turbo --dataset_cache_path ./.dataset-cache
+
+2) Train the model (loads from the cached dataset):
+   uv run src/train.py --dataset_cache_path ./.dataset-cache --model_name ivrit-ai/whisper-large-v3-turbo --output_dir whisper-heb-nikud --batch_size 16 --learning_rate 1e-5 --max_steps 1000
+   OR
+   export WANDB_PROJECT=whisper-heb-nikud
+   uv run src/train.py --dataset_cache_path ./.dataset-cache --model_name ivrit-ai/whisper-large-v3-turbo --output_dir whisper-heb-nikud --batch_size 16 --learning_rate 1e-5 --max_steps 90000 --report_to wandb
 
 To upload the model to the hub:
 uv run hf upload --repo-type model whisper-heb-nikud ./whisper-heb-nikud
@@ -40,11 +44,11 @@ def main():
     model.generation_config.task = "transcribe"
     model.generation_config.forced_decoder_ids = None # Deprecated
 
-    # Load dataset from cache (prepared via src/pre_tokenize.py)
+    # Load dataset from cache (output of src/pre_tokenize.py)
     if not Path(args.dataset_cache_path).exists():
         raise FileNotFoundError(
             f"Missing cache at {args.dataset_cache_path}. "
-            "Run: uv run src/pre_tokenize.py --data_dir dataset/ --model_name "
+            "Run pre-tokenize (set your data dir): uv run src/pre_tokenize.py --data_dir dataset/ --model_name "
             f"{args.model_name} --dataset_cache_path {args.dataset_cache_path}"
         )
 

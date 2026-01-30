@@ -7,7 +7,6 @@ SEP = "\t"
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_dir", type=str, required=True)
     parser.add_argument("--model_name", type=str, default="ivrit-ai/whisper-large-v3-turbo")
     parser.add_argument("--output_dir", type=str, default="./whisper-heb-nikud")
     parser.add_argument("--batch_size", type=int, default=16)

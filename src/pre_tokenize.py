@@ -1,20 +1,29 @@
 """
 Prepare and cache the dataset with progress bars.
 Example:
-uv run src/pre_tokenize.py --data_dir dataset/ --model_name ivrit-ai/whisper-large-v3-turbo --dataset_cache_path ./dataset_cache
+uv run src/pre_tokenize.py --data_dir dataset/ --model_name ivrit-ai/whisper-large-v3-turbo --dataset_cache_path ./.dataset-cache
 """
 
 from pathlib import Path
+import argparse
 
 import datasets
 from transformers import WhisperProcessor
 
-from config import get_args
 from data import load_dataset_from_csv, preprocess_dataset
 
 
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--data_dir", type=str, required=True)
+    parser.add_argument("--model_name", type=str, default="ivrit-ai/whisper-large-v3-turbo")
+    parser.add_argument("--dataset_cache_path", type=str, default="./.dataset-cache")
+    parser.add_argument("--batch_size", type=int, default=16)
+    return parser.parse_args()
+
+
 def main():
-    args = get_args()
+    args = parse_args()
     cache_path = Path(args.dataset_cache_path)
 
     if cache_path.exists():

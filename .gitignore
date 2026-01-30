@@ -27,3 +27,4 @@ wandb/
 !example1.wav
 whisper-heb-nikud-ct2/
 dataset/
+.dataset-cache/
